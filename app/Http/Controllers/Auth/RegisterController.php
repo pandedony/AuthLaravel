@@ -26,18 +26,27 @@ class RegisterController extends Controller
         'password' => 'regex:/^[^\s]+(\s*[^\s]+)*$/|min:6|confirmed|required'
       ]);
 
-      $date = new DateTime('+30 minutes');
-      $exptoken= $date->format('Y-m-d H:i:s');
 
-      $password = $request->password;
-      $newpassword = bcrypt($password);
+      $user = User::where('email', $request->email)->first();
 
-      $token=Str::random(32);
+      if($user == null ){
+        $date = new DateTime('+30 minutes');
+        $exptoken= $date->format('Y-m-d H:i:s');
+        
+        $password = $request->password;
+        $newpassword = bcrypt($password);
+        
+        $token=Str::random(32);
+        
+        
+        
+        Mail::to($request->email)->send(new VerificationMail($token));
+      }
+      else
+      {
+        return redirect('/register')->with('status', 'Email Sudah Digunakan!');
 
-      
-      
-      Mail::to($request->email)->send(new VerificationMail($token));
-
+      }
       if (Mail::failures()) {
         echo 'Mail not sent successfully.';
       } else {

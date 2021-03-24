@@ -12,6 +12,11 @@
             <div class="signup-form">
                 <h2 class="form-title">Sign up</h2>
                 <form method="POST" action="/" class="register-form" id="register-form">
+                @if (session('status'))
+                <div style="color:green; font-weight:bold; font-size:20px;" class="alert alert-success">
+                  {{session('status')}}
+                </div>
+                @endif
                 @csrf
                 <div class="form-group">
                         <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
