@@ -43,6 +43,13 @@ Route::get('logout', 'Auth\LoginController@logout');
 Route::group(['middleware' => ['auth']], function(){
   Route::group(['middleware' => ['login:admin']], function(){
       Route::get('admin', 'AdminController@index');
+      
+      Route::get('/admin/users_server_side', 'AdminUserController@getAllUserServerSide')->name('user.data');
+      Route::get('/admin/userdata', 'AdminUserController@indexGetUser');
+      Route::get('/admin/userdata/cetak', 'AdminUserController@printpdf');
+      Route::get('/admin/userdata/export_excel', 'AdminUserController@export_excel');
+      Route::get('/admin/userdata/{user}', 'AdminUserController@show');
+      Route::delete('/admin/userdata/{user}', 'AdminUserController@destroy');
   });
 
   Route::group(['middleware' => ['login:user']], function(){
